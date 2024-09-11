@@ -19,15 +19,17 @@
 
 package edp.davinci.core.inteceptor;
 
-import org.apache.linkis.server.security.SecurityFilter;
 import edp.core.annotation.CurrentUser;
 import edp.core.inteceptor.CurrentUserMethodArgumentResolverInterface;
 import edp.davinci.dao.UserMapper;
 import edp.davinci.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.linkis.server.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -80,9 +82,13 @@ public class CurrentUserMethodArgumentResolver implements CurrentUserMethodArgum
                         user.setUsername(accessUsername);
                         user.setName(accessUsername);
                         user.setPassword(null);
-                        log.info("Insert into visualis user: {}", user);
-                        userMapper.insert(user);
-                        return user;
+                        try {
+                            userMapper.insert(user);
+                            log.info("Insert into visualis user: {}", user);
+                            return user;
+                        } catch (DuplicateKeyException | ConcurrencyFailureException e) {
+                            visualisUser = (User) userMapper.selectByUsername(accessUsername);
+                        }
                     }
                 }
             }
