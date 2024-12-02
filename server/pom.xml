@@ -727,7 +727,7 @@
         <dependency>
             <groupId>org.nlpcn</groupId>
             <artifactId>elasticsearch-sql</artifactId>
-            <version>5.1.2.0</version>
+            <version>7.6.2.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>druid</artifactId>
@@ -753,11 +753,6 @@
                     <groupId>org.apache.httpcomponents</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
         </dependency>
 
         <dependency>
