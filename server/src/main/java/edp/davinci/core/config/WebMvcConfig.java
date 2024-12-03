@@ -34,12 +34,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import scala.Boolean;
-import scala.math.BigDecimal;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -154,6 +153,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @SuppressWarnings("unchecked")
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // 1.Add StringHttpMessageConverter
+        converters.add(new StringHttpMessageConverter());
+
+        // 2.Add FastJsonHttpMessageConverter
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.QuoteFieldNames,
